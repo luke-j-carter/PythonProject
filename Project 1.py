@@ -1,69 +1,107 @@
-encryptedList = []
-while True:
-      print("Please select your user type:\n"
-      "\t1. A public user\n"
-      "\t2. The owner of the keys\n"
-      "\t3. Exit Program\n")
-      userType = input("Enter your choice:")
-      while True:
-            #A public user options
-            if userType == "1":
-                  print("As a public user, what would you like to do?\n"
-                        "\t1. Send an encrypted message\n"
-                        "\t2. Authenticate a digital signature\n"
-                        "\t3. Exit\n")
-                  publicUserSelection = input("Enter your choice:")
-                  if publicUserSelection == "1":
-                        encryptedMessage = input("Enter a message:")
-                        encryptedList.append(encryptedMessage)
-                        print("Message encrypted and sent.")
-                  elif publicUserSelection == "2":
-                        print("There are no signatures to authenticate.")
-                  elif publicUserSelection == "3":
-                        break
-                  else :
-                        print("Invalid choice.")
-                        quit()
-            #The owner of the keys options
-            elif userType == "2":
-                  print("As the owner of the keys, what would you like to do?\n"
-                        "\t1. Decrypt a received message\n"
-                        "\t2. Digitally sign a message\n"
-                        "\t3. Show the keys\n"
-                        "\t4. Generate a new set of keys\n"
-                        "\t5. Exit\n")
-                  ownerOfTheKeysSelection = input("Enter your choice:")
-                  if ownerOfTheKeysSelection == "1":
-                        #Code for decrypting messages
-                        print("The following messages are available:")
-                        for idx, message in enumerate(encryptedList):
-                              print(f"{idx+1}.\t{message}")
-                        userEncryptedMessageChoice = int(input("Enter your choice:"))
-                        if 1 <= userEncryptedMessageChoice <= len(encryptedList):
-                              selectedMessage = encryptedList[userEncryptedMessageChoice-1]
-                              print(f"You selected {userEncryptedMessageChoice}. This is the decrypted message: {selectedMessage}")
-                              break
-                        else :
-                              break
+def clientInterface():
+    encryptedList = []
+    generateKeys()
 
-                  if ownerOfTheKeysSelection == "2":
-                        #Code to check for digital signatures
-                        print("There are no signatures to authenticate.")
-                  if ownerOfTheKeysSelection == "3":
-                        #Display Keys
-                        break
-                  if ownerOfTheKeysSelection == "4":
-                        #Generate a new set of keys
-                        break
-                  if ownerOfTheKeysSelection == "5":
-                        break
-                  else :
-                        print("Invalid choice.")
-                        quit()
-            #Exit the program
-            elif userType == "3":
-                  quit()
+    while True:
+        userType = getUserType()
 
-            else :
-                print("Invalid choice.")
-                quit()
+        if userType == "1":  # Public user
+            handlePublicUser(encryptedList)
+        elif userType == "2":  # Owner of keys
+            handleOwnerOfKeys(encryptedList)
+        elif userType == "3":  # Exit program
+            print("Bye for now!")
+            break
+        else:
+            print("Invalid choice.")
+
+
+def getUserType():
+    print("Please select your user type:\n"
+          "\t1. A public user\n"
+          "\t2. The owner of the keys\n"
+          "\t3. Exit Program\n")
+    return input("Enter your choice:")
+
+
+def handlePublicUser(encryptedList):
+    while True:
+        print("As a public user, what would you like to do?\n"
+              "\t1. Send an encrypted message\n"
+              "\t2. Authenticate a digital signature\n"
+              "\t3. Exit\n")
+        publicUserSelection = input("Enter your choice:")
+
+        if publicUserSelection == "1":
+            encryptedMessage = input("Enter a message:")
+            encryptedList.append(encryptedMessage)
+            print("Message encrypted and sent.")
+        elif publicUserSelection == "2":
+            print("There are no signatures to authenticate.")
+        elif publicUserSelection == "3":
+            break
+        else:
+            print("Invalid choice.")
+
+
+def handleOwnerOfKeys(encryptedList):
+    while True:
+        print("As the owner of the keys, what would you like to do?\n"
+              "\t1. Decrypt a received message\n"
+              "\t2. Digitally sign a message\n"
+              "\t3. Show the keys\n"
+              "\t4. Generate a new set of keys\n"
+              "\t5. Exit\n")
+        ownerSelection = input("Enter your choice:")
+
+        if ownerSelection == "1":
+            decryptMessage(encryptedList)
+        elif ownerSelection == "2":
+            print("There are no signatures to authenticate.")
+        elif ownerSelection == "3":
+            showKeys()
+        elif ownerSelection == "4":
+            generateNewKeys()
+        elif ownerSelection == "5":
+            break
+        else:
+            print("Invalid choice.")
+
+
+def decryptMessage(encryptedList):
+    if not encryptedList:
+        print("No messages to decrypt.")
+        return
+    print("The following messages are available:")
+    displayOptions(encryptedList)
+    userEncryptedMessageChoice = int(input("Enter your choice:"))
+
+    if 1 <= userEncryptedMessageChoice <= len(encryptedList):
+        selectedMessage = encryptedList[userEncryptedMessageChoice - 1]
+        print(f"You selected {userEncryptedMessageChoice}. This is the decrypted message: {selectedMessage}")
+    else:
+        print("Invalid choice.")
+
+
+def showKeys():
+    # Implement key display logic here (update the `keys` list accordingly)
+    keys = ["Public Key", "Private Key"]  # Example keys
+    displayOptions(keys)
+
+
+def generateNewKeys():
+    print("Generating a new set of keys...")
+    generateKeys()
+
+
+def displayOptions(options):
+    for idx, option in enumerate(options):
+        print(f"{idx + 1}.\t{option}")
+
+
+def generateKeys():
+    # Add the actual key generation logic here.
+    print("Generating keys...")
+
+
+clientInterface()
