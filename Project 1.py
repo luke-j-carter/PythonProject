@@ -108,15 +108,40 @@ def generate_keys(self):
     self.public_key = (self.e, self.n)
     self.private_key = (self.d, self.n)
 
-""" i'm gonna stop here for now, but basically 
-we need to do the encrption and decryption stuff
-as well as the sign message and verifying the signatures
-those 4 functions will go here, and then what luke has can follow after it, 
-we can build on that too 
-* this commit adds the implementation details for generating the keys
-and it should work properly - kendra
-ALSO, i wrote this in spyder and put it into here so the indention and stuff like that
-may be different, but we can paste the whole thing in spyder to make sure it runs when we're done :)"""
+def encrypt(self, message):
+    """ encrypt a message using the public key
+    message (str) message to encrypt
+    returns (str) base64 encoded encrypted message
+    """
+
+    # convert the messege to a numeric representation
+    numeric_message = [ord(char) for char in message]
+    # encrypt each characters using the public key
+    encrypted = []
+    for char_num in numeric_message:
+        encrypted_num = pow(char_num, self.public_key[0], self.public_key[1]0
+        encrypted.append(encrypted_num)
+
+    # encode and return as base64 string
+    return base64.b64encode(bytes(str(encrypted), 'utf-8')).decode()
+
+
+def decrypt(self, encrypted_message):
+    """ decrypt a message using the private key
+    encrypted_message (str) base64 message
+    returns: (str) decrypted original message
+    """
+
+    # decode base64 message
+    decoded = base64.b64decode(encrypted_message).decode()
+    # convert back to the list of numbers
+    encrypted_nums = eval(decoded)
+    # decrypt each number using private key
+    decrypted = []
+    for enc_num in encrypted_nums:
+        decrypted_num = pow(enc_num, self.private_key[0], self.private_key[1])
+        decrypted.append(chr(decrypted_num))
+    return ''.join(decrypted)
 
 
 
